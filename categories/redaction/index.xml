@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Redaction on Luke Hines : Bottle of Code</title>
+    <link>https://zackslash.github.io/categories/redaction/</link>
+    <description>Recent content in Redaction on Luke Hines : Bottle of Code</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 04 Jan 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://zackslash.github.io/categories/redaction/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Redaction can still leak data</title>
+      <link>https://zackslash.github.io/posts/redaction-can-still-leak-data/</link>
+      <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/posts/redaction-can-still-leak-data/</guid>
+      <description>This documents my discovery of a leaky redaction technique used in the payment platform &amp;lsquo;Payeer&amp;rsquo;. I think it is a good demonstration of how redaction can be used but still not meet its intent.
+Someone once asked me what I knew about the payment provider ‘Payeer’ as an alternative to Paypal, this prompted me to do a small bit of research and check them out. One thing that caught my eye was a feature on the marketing front page of payeer.</description>
+    </item>
+    
+  </channel>
+</rss>

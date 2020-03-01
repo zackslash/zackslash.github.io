@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="" />
+  <meta property="og:url" content="https://zackslash.github.io/posts/distributable-ios-framework/" />
+  <link rel="canonical" href="https://zackslash.github.io/posts/distributable-ios-framework/" /><script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "https:\/\/zackslash.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "Packaging a distributable Object-C library",
+      "headline" : "Packaging a distributable Object-C library",
+      "description" : "It’s coming to the end of a project and the final deliverable will be a library for iOS. I have seen a lot of people distribute these frameworks as a .zip with the prebuilt .a, separate .h files and resources, but there is a cleaner, friendlier way, that is to package everything into a .framework \x26amp; .bundle then distribute these as a .dmg.\nWe then move from giving customers a .",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2014",
+      "datePublished": "2014-09-06 00:00:00 \x2b0000 UTC",
+      "dateModified" : "2014-09-06 00:00:00 \x2b0000 UTC",
+      "url" : "https:\/\/zackslash.github.io\/posts\/distributable-ios-framework\/",
+      "keywords" : [ "xcode","apple","object-c","framework", ]
+  }
+</script>
+<title>Packaging a distributable Object-C library - Luke Hines : Bottle of Code</title>
+  <meta property="og:title" content="Packaging a distributable Object-C library - Luke Hines : Bottle of Code" />
+  <meta property="og:type" content="article" />
+  <meta name="description" content="It’s coming to the end of a project and the final deliverable will be a library for iOS. I have seen a lot of people distribute these frameworks as a .zip with the prebuilt .a, separate .h files and resources, but there is a cleaner, friendlier way, that is to package everything into a .framework &amp; .bundle then distribute these as a .dmg.
+We then move from giving customers a ." />
+
+  <link rel="stylesheet" href="/css/flexboxgrid-6.3.1.min.css" />
+  <link rel="stylesheet"
+    href="/css/github-markdown.min.css" />
+  <link rel="stylesheet" href="/css/highlight/tomorrow.min.css" />
+  <link rel="stylesheet" href="/css/index.css">
+  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="Luke Hines : Bottle of Code">
+  
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  
+  
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <div class="site-header">
+          
+<header>
+  <div class="signatures site-title">
+    <a href="/">Luke Hines</a>
+  </div>
+</header>
+<div class="row end-xs">
+  
+  
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">Packaging a distributable Object-C library</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2014-09-06 00:00:00 UTC">
+                06 Sep 2014
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          <p>It’s coming to the end of a project and the final deliverable will be a library for iOS. I have seen a lot of people distribute these frameworks as a .zip with the prebuilt .a, separate .h files and resources, but there is a cleaner, friendlier way, that is to package everything into a .framework &amp; .bundle then distribute these as a .dmg.</p>
+<p><img src="/posts/distributable-ios-framework_images/1.png" alt="Nicely packaged framework"></p>
+<p>We then move from giving customers a .zip with lots of different components that they have to import into their Xcode project, to a single .framework and .bundle that they can just drop right in and use, this also makes it easier for customers in-future should they want to move to an updated version of the library.</p>
+<p>Creating a .bundle</p>
+<p>A .bundle file is a standard folder with the extension ‘.bundle’ make sure all your resources (images, sounds, etc) are inside one of these. When copying a .bundle into an Xcode iOS app project it is automatically added to the bundle resources, so your libraries’ users won’t have to do any extra work. (You need to make sure that your libraries logic accesses your resources from inside the bundle).</p>
+<p>Creating a .framework</p>
+<p>Apple don’t seem to have any specific documentation for creating iOS dot frameworks but if you take a look at their OSX documentation you will see that .frameworks are in-fact just folder structures consisting primarily of symbolic links, it is important that all the symbolic links within the framework be relative paths, else when you move or distribute the framework all the paths will be wrong.</p>
+<p>This is the minimum structure for a .framework</p>
+<pre><code class="language-code" data-lang="code">MyFramework.framework/
+    MyFramework  -&gt; Versions/Current/MyFramework
+    Resources    -&gt; Versions/Current/Resources
+    Versions/
+        A/
+            MyFramework
+            Resources/
+                English.lproj/
+                    InfoPlist.strings
+                Info.plist
+        Current  -&gt; A
+</code></pre><p>Here is where I have found iOS to deviate slightly from OSX, as you may notice that it is possible to store our resources directly inside the framework (so why are we creating a separate bundle?), well… in OSX frameworks this is fine but if you try to do this in an iOS framework you will find that any resource inside a framework is not automatically copied into the application bundle resources, this causes issues when our framework requires our resources and we don’t want users of our framework to have to perform additional integration (we just want them to drop the framework into their project and be on their way), this is why we distribute our resources in a separate .bundle</p>
+<h2 id="importing-the-library">Importing the library</h2>
+<p>Once your library is stored as a .framework importing it changes slightly, where before you would have included your library like this.</p>
+<p><code>#import &quot;myClass.h&quot;</code></p>
+<p>You now import it like this instead</p>
+<p><code>#import &lt;lukesFramework/myClass.h&gt;</code></p>
+<h2 id="doing-all-this-inside-an-xcode-project">Doing all this inside an Xcode project</h2>
+<p>So, with all this in mind, I have put together the following script that performs everything mentioned, outputting our library as a .dmg with .framework &amp; .bundle inside, you just need to set your own project’s variables between lines 9 and 31. This script then goes in your Xcode Project&rsquo;s Targets ‘Build phases’ place it inside a ‘Run Script’.</p>
+<pre><code>####
+#   Output library project as a .dmg containing .framework and .bundle
+####
+ 
+# Sets framework version
+FRAMEWORK_VERSION=A
+ 
+###
+# Your vars START (input and output directories)
+###
+ 
+#Replace with your framework's name
+FRAMEWORK_NAME=LukesFramework
+ 
+#Replace with where you would like your .framework temporarily stored before its copied into the .dmg
+DOT_FRAMEWORK_OUTPUT_DIR=${SRCROOT}/bin/tmp/output/${FRAMEWORK_NAME}.framework
+ 
+#Replace with where you would like your final .dmg to be output
+DMG_OUTPUT_DIR=${SRCROOT}/bin/release/${FRAMEWORK_NAME}.dmg
+ 
+#Replace with your .bundle's location (inside your output derived data)
+DOT_BUNDLE_LOCATION=${TARGET_BUILD_DIR}/../LukesFramework/LukesFramework.bundle
+ 
+#Replace with your .a's location (inside your output derived data)
+DOT_A_LOCATION=${TARGET_BUILD_DIR}/../LukesFramework/LukesFramework-${CURRENT_PROJECT_VERSION}.a
+ 
+#Replace with the folder location containing your header files (inside your output derived data)
+DOT_H_LOCATION=${TARGET_BUILD_DIR}/../LukesFramework
+ 
+###
+# your vars END
+###
+ 
+# Remove any old versions
+if [ -d &quot;${DOT_FRAMEWORK_OUTPUT_DIR}&quot; ]
+then
+rm -rf &quot;${DOT_FRAMEWORK_OUTPUT_DIR}&quot;
+fi
+ 
+# Create dot framework file structure (an empty .framework)
+mkdir -p &quot;${DOT_FRAMEWORK_OUTPUT_DIR}&quot;
+mkdir -p &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/Versions&quot;
+mkdir -p &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/Versions/${FRAMEWORK_VERSION}&quot;
+mkdir -p &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/Versions/${FRAMEWORK_VERSION}/Resources&quot;
+mkdir -p &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/Versions/${FRAMEWORK_VERSION}/Headers&quot;
+ 
+# Create .framework sym links from relative paths
+ln -s &quot;${FRAMEWORK_VERSION}&quot; &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/Versions/Current&quot;
+ln -s &quot;Versions/Current/Headers&quot; &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/Headers&quot;
+ln -s &quot;Versions/Current/Resources&quot; &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/Resources&quot;
+ln -s &quot;Versions/Current/${FRAMEWORK_NAME}&quot; &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/${FRAMEWORK_NAME}&quot;
+ 
+# Copy headers and binary to their .framework locations
+cp -R ${DOT_A_LOCATION} &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/Versions/${FRAMEWORK_VERSION}/${FRAMEWORK_NAME}&quot;
+find ${DOT_H_LOCATION} -name &quot;*.h&quot; -exec cp {} ${DOT_FRAMEWORK_OUTPUT_DIR}/Versions/${FRAMEWORK_VERSION}/Headers/ \;
+ 
+# Copy bundle to .framework
+cp -R ${DOT_BUNDLE_LOCATION} &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/../&quot;
+ 
+# Wrap up into a DMG
+hdiutil create -volname ${FRAMEWORK_NAME} -srcfolder &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/../&quot; -ov -format UDZO ${DMG_OUTPUT_DIR}
+ 
+# Clean framework output (we only need the DMG)
+#rm -rf &quot;${DOT_FRAMEWORK_OUTPUT_DIR}/../../&quot;
+open ${DMG_OUTPUT_DIR}
+</code></pre>
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-category">
+              <a href="/categories/objective-c/">
+                Objective-C
+              </a>
+            </div>
+            
+          </div>
+        </div>
+
+        
+        
+
+        
+        
+        <div style="height: 50px;"></div>
+        
+        
+
+        <div class="site-footer">
+  
+  <div class="site-footer-item">
+    <a href="/contact" target="_blank">Contact Me</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="https://github.com/zackslash" target="_blank">Github</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="/index.xml" target="_blank">RSS</a>
+  </div>
+  
+  
+</div>
+
+      </div>
+    </div>
+  </article>
+
+  <script src="/js/highlight.pack.js"></script>
+
+
+<script>
+  hljs.initHighlightingOnLoad();
+  
+  
+  
+    
+    
+  
+</script>
+
+  
+
+</body>
+
+</html>

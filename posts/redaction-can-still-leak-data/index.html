@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="" />
+  <meta property="og:url" content="https://zackslash.github.io/posts/redaction-can-still-leak-data/" />
+  <link rel="canonical" href="https://zackslash.github.io/posts/redaction-can-still-leak-data/" /><script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "https:\/\/zackslash.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "Redaction can still leak data",
+      "headline" : "Redaction can still leak data",
+      "description" : "This documents my discovery of a leaky redaction technique used in the payment platform \x26lsquo;Payeer\x26rsquo;. I think it is a good demonstration of how redaction can be used but still not meet its intent.\nSomeone once asked me what I knew about the payment provider ‘Payeer’ as an alternative to Paypal, this prompted me to do a small bit of research and check them out. One thing that caught my eye was a feature on the marketing front page of payeer.",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2019",
+      "datePublished": "2019-01-04 00:00:00 \x2b0000 UTC",
+      "dateModified" : "2019-01-04 00:00:00 \x2b0000 UTC",
+      "url" : "https:\/\/zackslash.github.io\/posts\/redaction-can-still-leak-data\/",
+      "keywords" : [ "redaction", ]
+  }
+</script>
+<title>Redaction can still leak data - Luke Hines : Bottle of Code</title>
+  <meta property="og:title" content="Redaction can still leak data - Luke Hines : Bottle of Code" />
+  <meta property="og:type" content="article" />
+  <meta name="description" content="This documents my discovery of a leaky redaction technique used in the payment platform &lsquo;Payeer&rsquo;. I think it is a good demonstration of how redaction can be used but still not meet its intent.
+Someone once asked me what I knew about the payment provider ‘Payeer’ as an alternative to Paypal, this prompted me to do a small bit of research and check them out. One thing that caught my eye was a feature on the marketing front page of payeer." />
+
+  <link rel="stylesheet" href="/css/flexboxgrid-6.3.1.min.css" />
+  <link rel="stylesheet"
+    href="/css/github-markdown.min.css" />
+  <link rel="stylesheet" href="/css/highlight/tomorrow.min.css" />
+  <link rel="stylesheet" href="/css/index.css">
+  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="Luke Hines : Bottle of Code">
+  
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  
+  
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <div class="site-header">
+          
+<header>
+  <div class="signatures site-title">
+    <a href="/">Luke Hines</a>
+  </div>
+</header>
+<div class="row end-xs">
+  
+  
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">Redaction can still leak data</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2019-01-04 00:00:00 UTC">
+                04 Jan 2019
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          <p>This documents my discovery of a leaky redaction technique used in the payment platform &lsquo;Payeer&rsquo;. I think it is a good demonstration of how redaction can be used but still not meet its intent.</p>
+<p><img src="/posts/redaction-can-still-leak-data_images/1.png" alt="Payeer front page"></p>
+<p>Someone once asked me what I knew about the payment provider ‘Payeer’ as an alternative to Paypal, this prompted me to do a small bit of research and check them out. One thing that caught my eye was a feature on the marketing front page of payeer.com that appeared to be leaking real-time customer transaction details due to a bad implementation of redaction.</p>
+<p>On the front page of payeer.com was a neat ‘Payeer statistics’ grid that displayed real-time customer transactions, since these were real transactions happening right now you could see a redacted version of the customers email address along with the address of who they were paying and the amount of the transaction (checkout the image below), new transactions were flying by each second and you really got a feel for the amount of transactions that Payeer has to handle.</p>
+<p><img src="/posts/redaction-can-still-leak-data_images/2.png" alt="The vunerable feature"></p>
+<p>Curious if these were in fact real customer transactions I inspected the source to find that these transactions were being pushed to the marketing page through a web-socket directly from a Payeer API, what follows is an example of messages coming through from the WebSocket.</p>
+<table>
+<thead>
+<tr>
+<th>uid</th>
+<th align="left">timestamp</th>
+<th align="left">amount</th>
+<th align="left">currency</th>
+<th align="left">from</th>
+<th align="left">to</th>
+<th align="left">category</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>625906754</td>
+<td align="left">1910321873000</td>
+<td align="left">0.00136613</td>
+<td align="left">BTC</td>
+<td align="left">e*****ge*@mail.ru</td>
+<td align="left">j**1****r@gmail.com</td>
+<td align="left">$1600</td>
+</tr>
+<tr>
+<td>625906981</td>
+<td align="left">1910321905000</td>
+<td align="left">114.90</td>
+<td align="left">USD</td>
+<td align="left">e**h*n***@gmail.com</td>
+<td align="left">s**o***l**@**otmail.com</td>
+<td align="left">$1600</td>
+</tr>
+<tr>
+<td>625907531</td>
+<td align="left">1910321969000</td>
+<td align="left">1.74</td>
+<td align="left">EUR</td>
+<td align="left">**c***ge*@mail.ru</td>
+<td align="left">**m*****k2@gmail.com</td>
+<td align="left">$1600</td>
+</tr>
+<tr>
+<td>625908981</td>
+<td align="left">1910321979000</td>
+<td align="left">1.00246626</td>
+<td align="left">BTC</td>
+<td align="left">e*****ge*@mail.ru</td>
+<td align="left">S**r****r@gmail.com</td>
+<td align="left">$1600</td>
+</tr>
+</tbody>
+</table>
+<p>Though you can only see four messages in the data above I was sitting infront of hundreds of these messages and an issue became clear; the redacted email addresses were redacted in a nondeterministic fashion so when a payment took place with the same address a different part of that address was hidden each time, eventually leaking the entire address.</p>
+<ol>
+<li>l***h***s**@fakemail.com</li>
+<li>lu***i***8*@fakemail.com</li>
+<li>l*ke**ne**8@fakemail.com</li>
+</ol>
+<p>Equals</p>
+<ul>
+<li><a href="mailto:lukehines88@fakemail.com">lukehines88@fakemail.com</a></li>
+</ul>
+<p>I tested this on a few addresses and sure enough, I was able to reveal them. Generally it only took six messages to be able to unmask an entire transaction.</p>
+<p>After spending some time trying to find a technical contact for Payeer I was able to report the issue, although they noted that they did not consider this a critical issue they did fix it within 48 hours from my initial report and pay a bounty for finding the issue.</p>
+
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-category">
+              <a href="/categories/redaction/">
+                Redaction
+              </a>
+            </div>
+            
+          </div>
+        </div>
+
+        
+        
+
+        
+        
+        <div style="height: 50px;"></div>
+        
+        
+
+        <div class="site-footer">
+  
+  <div class="site-footer-item">
+    <a href="/contact" target="_blank">Contact Me</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="https://github.com/zackslash" target="_blank">Github</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="/index.xml" target="_blank">RSS</a>
+  </div>
+  
+  
+</div>
+
+      </div>
+    </div>
+  </article>
+
+  <script src="/js/highlight.pack.js"></script>
+
+
+<script>
+  hljs.initHighlightingOnLoad();
+  
+  
+  
+    
+    
+  
+</script>
+
+  
+
+</body>
+
+</html>

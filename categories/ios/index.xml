@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>iOS on Luke Hines : Bottle of Code</title>
+    <link>https://zackslash.github.io/categories/ios/</link>
+    <description>Recent content in iOS on Luke Hines : Bottle of Code</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 18 Oct 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://zackslash.github.io/categories/ios/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Custom GPS data in the iOS simulator</title>
+      <link>https://zackslash.github.io/posts/custom-gps-data-in-the-ios-simulator/</link>
+      <pubDate>Sat, 18 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/posts/custom-gps-data-in-the-ios-simulator/</guid>
+      <description>If you want to simulate GPS data in the iOS simulator you have two choices, Apple&amp;rsquo;s ‘real’ data (City run, freeway drive ect) or you can choose a single lat,long to simulate being in a static location, but… what if we want to simulate our own motorcycle ride or boat journey and work with ‘real’ GPS data in the simulator?
+My open source tool ‘XJourney‘ (Available HERE) achieves just this. Using XJourney you can put your own GPS data into the iOS simulator to simulate a full GPS Journey just like Apple’s own.</description>
+    </item>
+    
+  </channel>
+</rss>

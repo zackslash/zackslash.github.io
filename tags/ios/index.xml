@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>ios on Luke Hines : Bottle of Code</title>
+    <link>https://zackslash.github.io/tags/ios/</link>
+    <description>Recent content in ios on Luke Hines : Bottle of Code</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 08 Nov 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://zackslash.github.io/tags/ios/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Adding files to Xcode projects from CLI</title>
+      <link>https://zackslash.github.io/posts/xcode-add-files-from-command-line/</link>
+      <pubDate>Sat, 08 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/posts/xcode-add-files-from-command-line/</guid>
+      <description>NOTE!: It&amp;rsquo;s now the year 2020 and I believe this technique no longer works in the latest versions of xcode. I have archived the github repo. I&amp;rsquo;ve left everything public so the information still exists. What follows is my original article from 2014&amp;hellip;
+There have been times when building xcode projects from terminal has been very convenient, i’ve also done it in a lot of scripts, however there is a drawback to this technique and I hope to solve it in this article.</description>
+    </item>
+    
+    <item>
+      <title>Custom GPS data in the iOS simulator</title>
+      <link>https://zackslash.github.io/posts/custom-gps-data-in-the-ios-simulator/</link>
+      <pubDate>Sat, 18 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/posts/custom-gps-data-in-the-ios-simulator/</guid>
+      <description>If you want to simulate GPS data in the iOS simulator you have two choices, Apple&amp;rsquo;s ‘real’ data (City run, freeway drive ect) or you can choose a single lat,long to simulate being in a static location, but… what if we want to simulate our own motorcycle ride or boat journey and work with ‘real’ GPS data in the simulator?
+My open source tool ‘XJourney‘ (Available HERE) achieves just this. Using XJourney you can put your own GPS data into the iOS simulator to simulate a full GPS Journey just like Apple’s own.</description>
+    </item>
+    
+  </channel>
+</rss>

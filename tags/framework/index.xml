@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>framework on Luke Hines : Bottle of Code</title>
+    <link>https://zackslash.github.io/tags/framework/</link>
+    <description>Recent content in framework on Luke Hines : Bottle of Code</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 06 Sep 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://zackslash.github.io/tags/framework/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Packaging a distributable Object-C library</title>
+      <link>https://zackslash.github.io/posts/distributable-ios-framework/</link>
+      <pubDate>Sat, 06 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/posts/distributable-ios-framework/</guid>
+      <description>It’s coming to the end of a project and the final deliverable will be a library for iOS. I have seen a lot of people distribute these frameworks as a .zip with the prebuilt .a, separate .h files and resources, but there is a cleaner, friendlier way, that is to package everything into a .framework &amp;amp; .bundle then distribute these as a .dmg.
+We then move from giving customers a .</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="" />
+  <meta property="og:url" content="https://zackslash.github.io/posts/custom-gps-data-in-the-ios-simulator/" />
+  <link rel="canonical" href="https://zackslash.github.io/posts/custom-gps-data-in-the-ios-simulator/" /><script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "https:\/\/zackslash.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "Custom GPS data in the iOS simulator",
+      "headline" : "Custom GPS data in the iOS simulator",
+      "description" : "If you want to simulate GPS data in the iOS simulator you have two choices, Apple\x26rsquo;s ‘real’ data (City run, freeway drive ect) or you can choose a single lat,long to simulate being in a static location, but… what if we want to simulate our own motorcycle ride or boat journey and work with ‘real’ GPS data in the simulator?\nMy open source tool ‘XJourney‘ (Available HERE) achieves just this. Using XJourney you can put your own GPS data into the iOS simulator to simulate a full GPS Journey just like Apple’s own.",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2014",
+      "datePublished": "2014-10-18 00:00:00 \x2b0000 UTC",
+      "dateModified" : "2014-10-18 00:00:00 \x2b0000 UTC",
+      "url" : "https:\/\/zackslash.github.io\/posts\/custom-gps-data-in-the-ios-simulator\/",
+      "keywords" : [ "xcode","apple","ios", ]
+  }
+</script>
+<title>Custom GPS data in the iOS simulator - Luke Hines : Bottle of Code</title>
+  <meta property="og:title" content="Custom GPS data in the iOS simulator - Luke Hines : Bottle of Code" />
+  <meta property="og:type" content="article" />
+  <meta name="description" content="If you want to simulate GPS data in the iOS simulator you have two choices, Apple&rsquo;s ‘real’ data (City run, freeway drive ect) or you can choose a single lat,long to simulate being in a static location, but… what if we want to simulate our own motorcycle ride or boat journey and work with ‘real’ GPS data in the simulator?
+My open source tool ‘XJourney‘ (Available HERE) achieves just this. Using XJourney you can put your own GPS data into the iOS simulator to simulate a full GPS Journey just like Apple’s own." />
+
+  <link rel="stylesheet" href="/css/flexboxgrid-6.3.1.min.css" />
+  <link rel="stylesheet"
+    href="/css/github-markdown.min.css" />
+  <link rel="stylesheet" href="/css/highlight/tomorrow.min.css" />
+  <link rel="stylesheet" href="/css/index.css">
+  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="Luke Hines : Bottle of Code">
+  
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  
+  
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <div class="site-header">
+          
+<header>
+  <div class="signatures site-title">
+    <a href="/">Luke Hines</a>
+  </div>
+</header>
+<div class="row end-xs">
+  
+  
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">Custom GPS data in the iOS simulator</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2014-10-18 00:00:00 UTC">
+                18 Oct 2014
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          <p>If you want to simulate GPS data in the iOS simulator you have two choices, Apple&rsquo;s ‘real’ data (City run, freeway drive ect) or you can choose a single lat,long to simulate being in a static location, but… what if we want to simulate our own motorcycle ride or boat journey and work with ‘real’ GPS data in the simulator?</p>
+<p>My open source tool ‘XJourney‘ (Available HERE) achieves just this. Using XJourney you can put your own GPS data into the iOS simulator to simulate a full GPS Journey just like Apple’s own.</p>
+<p>So this article’s aim is to shed some light on how Apple’s GPS test data is stored in the simulator and describe the process that XJourney now automates.</p>
+<p>In the iOS simulator we are given a few options to simulate GPS activity.</p>
+<p><img src="/posts/custom-gps-data-in-the-ios-simulator_images/1.png" alt="Stock ios GPS simulation options"></p>
+<p>There is ‘Custom Location‘ but this option only allows us to specify a single lat,long and I want to simulate an entire journey! So I set out to find out how Apple’s test data gets loaded into the simulator.</p>
+<p>After a bit of digging we find Apple’s test data is stored as plists inside the iOS simulator bundle,</p>
+<p>The location of these is:</p>
+<pre><code>Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/System/Library/Frameworks/CoreLocation.framework/Support/SimulationScenarios/
+</code></pre><p><img src="/posts/custom-gps-data-in-the-ios-simulator_images/2.png" alt="Secret location of the simulation files"></p>
+<p>Popping open the ‘Freeway Drive’ plist gave me the following (I’ve removed a few hundred ‘Data’ objects)</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+    &lt;key&gt;Locations&lt;/key&gt;
+    &lt;array&gt;
+        &lt;data&gt;
+        YnBsaXN0MDDUAQIDBAUIKClUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJj
+        aGl2ZXLRBgdUcm9vdIABowkKIVUkbnVsbNsLDA0ODxAREhMUFRYXGBkaGxwd
+        Hh8gXxAma0NMTG9jYXRpb25Db2RpbmdLZXlDb29yZGluYXRlTGF0aXR1ZGVf
+        ECRrQ0xMb2NhdGlvbkNvZGluZ0tleVZlcnRpY2FsQWNjdXJhY3lfEB1rQ0xM
+        b2NhdGlvbkNvZGluZ0tleVRpbWVzdGFtcF8QJmtDTExvY2F0aW9uQ29kaW5n
+        S2V5SG9yaXpvbnRhbEFjY3VyYWN5XxAca0NMTG9jYXRpb25Db2RpbmdLZXlM
+        aWZlc3Bhbl8QJ2tDTExvY2F0aW9uQ29kaW5nS2V5Q29vcmRpbmF0ZUxvbmdp
+        dHVkZV8QGmtDTExvY2F0aW9uQ29kaW5nS2V5Q291cnNlXxAca0NMTG9jYXRp
+        b25Db2RpbmdLZXlBbHRpdHVkZV8QGWtDTExvY2F0aW9uQ29kaW5nS2V5U3Bl
+        ZWRWJGNsYXNzXxAYa0NMTG9jYXRpb25Db2RpbmdLZXlUeXBlI0BCqupIiK/n
+        I7/wAAAAAAAAI0Gy071oTZFoI0AUAAAAAAAAI0A+AAAAAAAAI8BeghVAI1ul
+        I0BmR64UeuFIIwAAAAAAAAAAIz/6uFHrhR64gAIQAdIiIyQnWCRjbGFzc2Vz
+        WiRjbGFzc25hbWWiJSZaQ0xMb2NhdGlvblhOU09iamVjdFpDTExvY2F0aW9u
+        EgABhqBfEA9OU0tleWVkQXJjaGl2ZXIACAARABYAHwAoADIANQA6ADwAQABG
+        AF0AhgCtAM0A9gEVAT8BXAF7AZcBngG5AcIBywHUAd0B5gHvAfgCAQIKAgwC
+        DgITAhwCJwIqAjUCPgJJAk4AAAAAAAACAQAAAAAAAAAqAAAAAAAAAAAAAAAA
+        AAACYA==
+        &lt;/data&gt;
+        &lt;data&gt;
+        YnBsaXN0MDDUAQIDBAUIKClUJHRvcFgkb2JqZWN0c1gkdmVyc2lvblkkYXJj
+        aGl2ZXLRBgdUcm9vdIABowkKIVUkbnVsbNsLDA0ODxAREhMUFRYXGBkaGxwd
+        Hh8gXxAma0NMTG9jYXRpb25Db2RpbmdLZXlDb29yZGluYXRlTGF0aXR1ZGVf
+        ECRrQ0xMb2NhdGlvbkNvZGluZ0tleVZlcnRpY2FsQWNjdXJhY3lfEB1rQ0xM
+        b2NhdGlvbkNvZGluZ0tleVRpbWVzdGFtcF8QJmtDTExvY2F0aW9uQ29kaW5n
+        S2V5SG9yaXpvbnRhbEFjY3VyYWN5XxAca0NMTG9jYXRpb25Db2RpbmdLZXlM
+        aWZlc3Bhbl8QJ2tDTExvY2F0aW9uQ29kaW5nS2V5Q29vcmRpbmF0ZUxvbmdp
+        dHVkZV8QGmtDTExvY2F0aW9uQ29kaW5nS2V5Q291cnNlXxAca0NMTG9jYXRp
+        b25Db2RpbmdLZXlBbHRpdHVkZV8QGWtDTExvY2F0aW9uQ29kaW5nS2V5U3Bl
+        ZWRWJGNsYXNzXxAYa0NMTG9jYXRpb25Db2RpbmdLZXlUeXBlI0BCqumnIxoL
+        I7/wAAAAAAAAI0Gy071pTxqgI0AUAAAAAAAAI0A+AAAAAAAAI8BeghVFzOjR
+        I0BmgAAAAAAAIwAAAAAAAAAAI0AAPXCj1wo9gAIQAdIiIyQnWCRjbGFzc2Vz
+        WiRjbGFzc25hbWWiJSZaQ0xMb2NhdGlvblhOU09iamVjdFpDTExvY2F0aW9u
+        EgABhqBfEA9OU0tleWVkQXJjaGl2ZXIACAARABYAHwAoADIANQA6ADwAQABG
+        AF0AhgCtAM0A9gEVAT8BXAF7AZcBngG5AcIBywHUAd0B5gHvAfgCAQIKAgwC
+        DgITAhwCJwIqAjUCPgJJAk4AAAAAAAACAQAAAAAAAAAqAAAAAAAAAAAAAAAA
+        AAACYA==
+        &lt;/data&gt;
+      
+          SNIP!.......&lt;MUCH MORE DATA&gt;.......
+ 
+    &lt;/array&gt;
+    &lt;key&gt;Options&lt;/key&gt;
+    &lt;dict&gt;
+        &lt;key&gt;LocationDeliveryBehavior&lt;/key&gt;
+        &lt;real&gt;0.0&lt;/real&gt;
+        &lt;key&gt;LocationRepeatBehavior&lt;/key&gt;
+        &lt;real&gt;2&lt;/real&gt;
+    &lt;/dict&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre><p>From this we can see that the plist contains a ‘Locations’ array with what looks to be Base 64 encoded entries. Many Base 64 decoders returned messy results, it eventually turned out that this is because the result is not text but a binary file (I finally had success using this decoder)</p>
+<p>When we turn the base 64 decoded binary output back into text we can see that the base 64 encoded entries are plists.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+&lt;plist version=&quot;1.0&quot;&gt;
+&lt;dict&gt;
+    &lt;key&gt;$archiver&lt;/key&gt;
+    &lt;string&gt;NSKeyedArchiver&lt;/string&gt;
+    &lt;key&gt;$objects&lt;/key&gt;
+    &lt;array&gt;
+        &lt;string&gt;$null&lt;/string&gt;
+        &lt;dict&gt;
+            &lt;key&gt;$class&lt;/key&gt;
+            &lt;dict&gt;
+                &lt;key&gt;CF$UID&lt;/key&gt;
+                &lt;integer&gt;2&lt;/integer&gt;
+            &lt;/dict&gt;
+            &lt;key&gt;kCLLocationCodingKeyAltitude&lt;/key&gt;
+            &lt;real&gt;0.0&lt;/real&gt;
+            &lt;key&gt;kCLLocationCodingKeyCoordinateLatitude&lt;/key&gt;
+            &lt;real&gt;37.761915389999999&lt;/real&gt;
+            &lt;key&gt;kCLLocationCodingKeyCoordinateLongitude&lt;/key&gt;
+            &lt;real&gt;-122.40588588999999&lt;/real&gt;
+            &lt;key&gt;kCLLocationCodingKeyCourse&lt;/key&gt;
+            &lt;real&gt;24.609999999999999&lt;/real&gt;
+            &lt;key&gt;kCLLocationCodingKeyHorizontalAccuracy&lt;/key&gt;
+            &lt;real&gt;5&lt;/real&gt;
+            &lt;key&gt;kCLLocationCodingKeyLifespan&lt;/key&gt;
+            &lt;real&gt;30&lt;/real&gt;
+            &lt;key&gt;kCLLocationCodingKeySpeed&lt;/key&gt;
+            &lt;real&gt;26.5&lt;/real&gt;
+            &lt;key&gt;kCLLocationCodingKeyTimestamp&lt;/key&gt;
+            &lt;real&gt;315868704.34100002&lt;/real&gt;
+            &lt;key&gt;kCLLocationCodingKeyType&lt;/key&gt;
+            &lt;integer&gt;1&lt;/integer&gt;
+            &lt;key&gt;kCLLocationCodingKeyVerticalAccuracy&lt;/key&gt;
+            &lt;real&gt;-1&lt;/real&gt;
+        &lt;/dict&gt;
+        &lt;dict&gt;
+            &lt;key&gt;$classes&lt;/key&gt;
+            &lt;array&gt;
+                &lt;string&gt;CLLocation&lt;/string&gt;
+                &lt;string&gt;NSObject&lt;/string&gt;
+            &lt;/array&gt;
+            &lt;key&gt;$classname&lt;/key&gt;
+            &lt;string&gt;CLLocation&lt;/string&gt;
+        &lt;/dict&gt;
+    &lt;/array&gt;
+    &lt;key&gt;$top&lt;/key&gt;
+    &lt;dict&gt;
+        &lt;key&gt;root&lt;/key&gt;
+        &lt;dict&gt;
+            &lt;key&gt;CF$UID&lt;/key&gt;
+            &lt;integer&gt;1&lt;/integer&gt;
+        &lt;/dict&gt;
+    &lt;/dict&gt;
+    &lt;key&gt;$version&lt;/key&gt;
+    &lt;integer&gt;100000&lt;/integer&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre><p>These plists are much more interesting as they appears to be NSKeyArchived CLLocation objects each containing all the information for a single GPS location update.</p>
+<p>Having found this out, I then manual wrote my own journey plist in the same format as Apple’s but containing my own base 64 encoded, NSArchived CLLocation objects. Once my file was placed alongside Apple’s in the folder mentioned earlier, sure enough my new entry appeared under ‘Location’ (I had to ‘Reset Content and Settings’ of the simulator before it appeared).</p>
+<p><img src="/posts/custom-gps-data-in-the-ios-simulator_images/2.png" alt="New simulation option"></p>
+<p>I then wrote a small desktop tool called ‘XJourney’ to automate this process, input a CSV of CLLocations and it will add these as a entry to your simulator, for more information on the XJourney tool or to download the app/or source code please see the XJourney Github page.</p>
+<p><img src="/posts/custom-gps-data-in-the-ios-simulator_images/2.png" alt="Tool screenshot"></p>
+<p><em><strong>Happy GPS simulating!</strong></em></p>
+
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-category">
+              <a href="/categories/ios/">
+                iOS
+              </a>
+            </div>
+            
+          </div>
+        </div>
+
+        
+        
+
+<div class="releated-content">
+  <h3>Related Posts</h3>
+  <ul>
+    
+    <li><a href="/posts/distributable-ios-framework/">Packaging a distributable Object-C library</a></li>
+    
+  </ul>
+</div>
+
+        
+        
+        <div style="height: 50px;"></div>
+        
+        
+
+        <div class="site-footer">
+  
+  <div class="site-footer-item">
+    <a href="/contact" target="_blank">Contact Me</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="https://github.com/zackslash" target="_blank">Github</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="/index.xml" target="_blank">RSS</a>
+  </div>
+  
+  
+</div>
+
+      </div>
+    </div>
+  </article>
+
+  <script src="/js/highlight.pack.js"></script>
+
+
+<script>
+  hljs.initHighlightingOnLoad();
+  
+  
+  
+    
+    
+  
+</script>
+
+  
+
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hardware on Luke Hines : Bottle of Code</title>
+    <link>https://zackslash.github.io/tags/hardware/</link>
+    <description>Recent content in hardware on Luke Hines : Bottle of Code</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 12 Jul 2015 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://zackslash.github.io/tags/hardware/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Monsoon power monitoring hardware and iPhone</title>
+      <link>https://zackslash.github.io/posts/monsoon-power-monitor-hardware-and-iphone/</link>
+      <pubDate>Sun, 12 Jul 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/posts/monsoon-power-monitor-hardware-and-iphone/</guid>
+      <description>Note: This post was originally written in 2015 and i&amp;rsquo;ve recieved great sucess stories from numerous people of whom it has helped. I&amp;rsquo;ve had reports of this technique working for many of the later iPhone models and even the Apple watch! This post was also used as a reference in the book High Performance iOS Apps. What follows is the original article.
+Sometimes you have to dig deep in search of optimization; one such place is power usage.</description>
+    </item>
+    
+  </channel>
+</rss>

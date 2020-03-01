@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="" />
+  <meta property="og:url" content="https://zackslash.github.io/posts/midi-translation/" />
+  <link rel="canonical" href="https://zackslash.github.io/posts/midi-translation/" /><script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "https:\/\/zackslash.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "MIDI Translation",
+      "headline" : "MIDI Translation",
+      "description" : "Download the Pro2Addict tool: Mac – Windows – Linux – Source Code\nDownload from links above or keep reading for some insight into the solution.\nMIDI files are the universal standard for music data such as musical notes, when they are played and how long each note is held. They work great for the majority of instruments that follow a standard notation; however there are some inconsistencies when interpreting music for percussion instruments.",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2017",
+      "datePublished": "2017-01-16 00:00:00 \x2b0000 UTC",
+      "dateModified" : "2017-01-16 00:00:00 \x2b0000 UTC",
+      "url" : "https:\/\/zackslash.github.io\/posts\/midi-translation\/",
+      "keywords" : [ "midi","drums", ]
+  }
+</script>
+<title>MIDI Translation - Luke Hines : Bottle of Code</title>
+  <meta property="og:title" content="MIDI Translation - Luke Hines : Bottle of Code" />
+  <meta property="og:type" content="article" />
+  <meta name="description" content="Download the Pro2Addict tool: Mac – Windows – Linux – Source Code
+Download from links above or keep reading for some insight into the solution.
+MIDI files are the universal standard for music data such as musical notes, when they are played and how long each note is held. They work great for the majority of instruments that follow a standard notation; however there are some inconsistencies when interpreting music for percussion instruments." />
+
+  <link rel="stylesheet" href="/css/flexboxgrid-6.3.1.min.css" />
+  <link rel="stylesheet"
+    href="/css/github-markdown.min.css" />
+  <link rel="stylesheet" href="/css/highlight/tomorrow.min.css" />
+  <link rel="stylesheet" href="/css/index.css">
+  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="Luke Hines : Bottle of Code">
+  
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  
+  
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <div class="site-header">
+          
+<header>
+  <div class="signatures site-title">
+    <a href="/">Luke Hines</a>
+  </div>
+</header>
+<div class="row end-xs">
+  
+  
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">MIDI Translation</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2017-01-16 00:00:00 UTC">
+                16 Jan 2017
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          <p><img src="/posts/midi-translation_images/1.png" alt="Title image"></p>
+<p>Download the Pro2Addict tool: Mac – Windows – Linux – Source Code</p>
+<p>Download from links above or keep reading for some insight into the solution.</p>
+<p>MIDI files are the universal standard for music data such as musical notes, when they are played and how long each note is held. They work great for the majority of instruments that follow a standard notation; however there are some inconsistencies when interpreting music for percussion instruments.</p>
+<p>I encountered these inconsistencies when trying to move a drum composition from Guitar Pro 6 into Addictive Drums 2; the way in which drum notes are recorded in the MIDI format means that one program may interpret them completely differently to another.</p>
+<p>My solution to this was to write a tool that translates .mid files originally written in Guitar Pro 6 (GP6) to the format understood by Addictive Drums 2 (AD2).</p>
+<p>Currently the only solution and advice I have come across is to “re-write your composition in AD2” so this should be a better way.</p>
+<p>A MIDI track stores each note as an ‘event’. For example; if we are recording notation for a piano and pressed one of the keys then the note itself will be recorded as a MIDI event along with other data such as how long to play it for and the velocity that the piano key was hit. This all transfers relatively well to percussion instruments but with one difference, where on a piano (and most instruments) the location of the note is a constant, the individual drums of a percussion instrument do not seem to have a constant note attached to them, so the judgement of how to record the MIDI event is up to the software’s author, Developer ‘A’ may decide that ‘kick drum’ events are recorded as the note C4 and Developer ‘B’ may have already decided that their ‘Snare‘ is recorded as the note C4, so a MIDI file from developer A when played back in Developer B’s software will play the snare drum where the kick drum was expected. This is exactly the case between GP6 and AD2.</p>
+<p>To create a solution to this, I started with compiling a list of each musical note that each drum was mapped to in the respective softwares. I managed to find a 1 to 1 map for every entry apart from &lsquo;Cowbell&rsquo; since I could find no specific mapping for it in AD2.</p>
+<p>Next I found a map online of the integer values used by MIDI to describe each musical note, I compiled another version of my mapping but using the MIDI codes instead of the musical notes.</p>
+<p>Lastly I wrote a small tool that would search for a drum track inside of a MIDI file (in later revisions of the MIDI specification the drum track is always Track 10, but instead of relying on this I look for any track that has ‘drums’ in its title as this seems to be more accurate) and after finding this track, work through it note for note; substituting the GP6 MIDI note number for the AD2 equivalent but keeping the other existing values (such as timing) untouched.</p>
+<p>The result is a tool i’ve named ‘Pro2Addict’ that outputs drum tracks to AD2 exactly as your score intended, no more need to write the same piece twice!</p>
+<p><a href="https://github.com/zackslash/Pro2Addict">Download Source code and binaries here on Github</a></p>
+<p>Hopefully this is as useful to anyone else as it is to me.</p>
+
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-category">
+              <a href="/categories/midi/">
+                MIDI
+              </a>
+            </div>
+            
+          </div>
+        </div>
+
+        
+        
+
+        
+        
+        <div style="height: 50px;"></div>
+        
+        
+
+        <div class="site-footer">
+  
+  <div class="site-footer-item">
+    <a href="/contact" target="_blank">Contact Me</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="https://github.com/zackslash" target="_blank">Github</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="/index.xml" target="_blank">RSS</a>
+  </div>
+  
+  
+</div>
+
+      </div>
+    </div>
+  </article>
+
+  <script src="/js/highlight.pack.js"></script>
+
+
+<script>
+  hljs.initHighlightingOnLoad();
+  
+  
+  
+    
+    
+  
+</script>
+
+  
+
+</body>
+
+</html>

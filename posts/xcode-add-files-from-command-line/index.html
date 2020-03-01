@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="" />
+  <meta property="og:url" content="https://zackslash.github.io/posts/xcode-add-files-from-command-line/" />
+  <link rel="canonical" href="https://zackslash.github.io/posts/xcode-add-files-from-command-line/" /><script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "https:\/\/zackslash.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "Adding files to Xcode projects from CLI",
+      "headline" : "Adding files to Xcode projects from CLI",
+      "description" : "NOTE!: It\x26rsquo;s now the year 2020 and I believe this technique no longer works in the latest versions of xcode. I have archived the github repo. I\x26rsquo;ve left everything public so the information still exists. What follows is my original article from 2014\x26hellip;\nThere have been times when building xcode projects from terminal has been very convenient, i’ve also done it in a lot of scripts, however there is a drawback to this technique and I hope to solve it in this article.",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2014",
+      "datePublished": "2014-11-08 00:00:00 \x2b0000 UTC",
+      "dateModified" : "2014-11-08 00:00:00 \x2b0000 UTC",
+      "url" : "https:\/\/zackslash.github.io\/posts\/xcode-add-files-from-command-line\/",
+      "keywords" : [ "xcode","cli","ios","apple", ]
+  }
+</script>
+<title>Adding files to Xcode projects from CLI - Luke Hines : Bottle of Code</title>
+  <meta property="og:title" content="Adding files to Xcode projects from CLI - Luke Hines : Bottle of Code" />
+  <meta property="og:type" content="article" />
+  <meta name="description" content="NOTE!: It&rsquo;s now the year 2020 and I believe this technique no longer works in the latest versions of xcode. I have archived the github repo. I&rsquo;ve left everything public so the information still exists. What follows is my original article from 2014&hellip;
+There have been times when building xcode projects from terminal has been very convenient, i’ve also done it in a lot of scripts, however there is a drawback to this technique and I hope to solve it in this article." />
+
+  <link rel="stylesheet" href="/css/flexboxgrid-6.3.1.min.css" />
+  <link rel="stylesheet"
+    href="/css/github-markdown.min.css" />
+  <link rel="stylesheet" href="/css/highlight/tomorrow.min.css" />
+  <link rel="stylesheet" href="/css/index.css">
+  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="Luke Hines : Bottle of Code">
+  
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  
+  
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <div class="site-header">
+          
+<header>
+  <div class="signatures site-title">
+    <a href="/">Luke Hines</a>
+  </div>
+</header>
+<div class="row end-xs">
+  
+  
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">Adding files to Xcode projects from CLI</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2014-11-08 00:00:00 UTC">
+                08 Nov 2014
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          <p><em><strong>NOTE!: It&rsquo;s now the year 2020 and I believe this technique no longer works in the latest versions of xcode. I have archived the github repo. I&rsquo;ve left everything public so the information still exists. What follows is my original article from 2014&hellip;</strong></em></p>
+<p>There have been times when building xcode projects from terminal has been very convenient, i’ve also done it in a lot of scripts, however there is a drawback to this technique and I hope to solve it in this article. That is drawback is</p>
+<p><strong>Currently there is no way of adding files to a project without opening up Xcode and doing it manually.</strong></p>
+<p>For automated builds this is a major drawback! Want to dump resources into your project and build from command line? Too bad you&rsquo;re gonna have to open up Xcode and add the files to the project yourself. Want to use a separate IDE to create your .h and .m files and then build the project through a script? again too bad…</p>
+<p>I was very surprised at this so I set out to research the ‘.xcodeproj’ file format and find a solution and here&rsquo;s what I found.</p>
+<p>Firstly, this may not be a surprise but the .xcodeproj file, like many files in OSX is actually just a container for many more files (right click any .xcodeproj select “Show package contents” and you will see what I mean)</p>
+<p><img src="/posts/xcode-add-files-from-command-line_images/1.png" alt="How to view contents of a .xcodeproj file"></p>
+<p>The important file in this case, the one that Xcode uses to keep track of the project’s state is ‘project.pbxproj’.</p>
+<p><img src="/posts/xcode-add-files-from-command-line_images/2.png" alt="The .pbxproj file inside an .xcodeproj"></p>
+<p>As far as I can tell .pbxproj is a completely undocumented format (publically) on the plus side it does have a ‘JSON like’ structure. To explore it I started to add different file types to a project and studied the changes in the .pbxproj entries.</p>
+<p>I saw that the comments in the .pbxproj are actually very useful, for example “/* Begin PBXCopyFilesBuildPhase section */“ tells us that the items listed are destined for the copy file build phase and the ‘files’ array contains the ID for each file to be added in that section. Every file in your Xcode project has a unique ID generated by Xcode and you can find every file’s ID by taking a look in the ‘PBXFileReference’ section. An example entry in this section can be seen below.</p>
+<p><code>B240659C199957A4000782C3 /* LukesProjectTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LukesProjectTests.m; sourceTree = &quot;&quot;; };</code></p>
+<p>This entry translates to:</p>
+<pre><code>B240659C199957A4000782C3 = Entry ID
+PBXFileReference =         Entry type
+sourcecode.c.objc =        File type
+LukesProjectTests.m =      Relative location
+</code></pre><p>With this knowledge, I quickly wrote a small command line application in C++ called “Xcode Proj Adder” to add a file to an Xcode project from command line. You can find links to the application and source code at the end of the article.</p>
+<p>Adding files to an Xcode project through command line is now as simple as entering this</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ./XcodeProjAdder -XCP /Users/jimjohn/Products/TestProj.xcodeproj -SCSV ../tst1.cpp,../tst2.cpp,../tst1.h
+</code></pre></div><p>the -XCP parameter supplies the fully qualified path of ‘.xcodeproj’ (the project you want to add files to) and -SCSV is a CSV list of source file locations relative to the .xcodeproj file (In this example the .cpp files are in the folder above the .xcodeproj), when adding the files to your Xcode project the tool also creates a backup incase you want to remove the files you just added, to revert the project back to the state it was before you added these files you can run the following command.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ ./XcodeProjAdder -XCP /Users/jimjohn/Products/TestProj.xcodeproj -RESTORE
+</code></pre></div><p>I have found this functionality useful for files that are supposed to be updated with every run of a script, an example is a project where images are constantly getting updated by a designer. I have my Xcode project with none of the images added to it, then I run a script that uses this tool to add all the latest images to the project from a specific folder, the script then builds the project through command line and lastly uses the tool to ‘restore’ the project removing the images ready for next run, this ensures that when built the project always has the most up-to-date images.</p>
+<h2 id="get-the-tool">Get the tool</h2>
+<p>The Xcode-Proj-Adder tool is available <a href="https://drive.google.com/file/d/0BxVgyPt7oHs5ZzZNVTh1TE5vZlU/edit?usp=sharing">Here</a> (You may need to run <code>chmod a+x XcodeProjAdder</code> to make it executable)</p>
+<p>The source is also available on <a href="https://github.com/zackslash/Xcode-Proj-Adder">GitHub</a></p>
+<p>Xcode Proj Adder is confirmed working with Xcode versions 4,5 and 6. It looks like the .pbxproj file format has not changed in a very long time so I expect this to be my solution for at least a while.</p>
+
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-category">
+              <a href="/categories/xcode/">
+                Xcode
+              </a>
+            </div>
+            
+          </div>
+        </div>
+
+        
+        
+
+<div class="releated-content">
+  <h3>Related Posts</h3>
+  <ul>
+    
+    <li><a href="/posts/custom-gps-data-in-the-ios-simulator/">Custom GPS data in the iOS simulator</a></li>
+    
+    <li><a href="/posts/distributable-ios-framework/">Packaging a distributable Object-C library</a></li>
+    
+  </ul>
+</div>
+
+        
+        
+        <div style="height: 50px;"></div>
+        
+        
+
+        <div class="site-footer">
+  
+  <div class="site-footer-item">
+    <a href="/contact" target="_blank">Contact Me</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="https://github.com/zackslash" target="_blank">Github</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="/index.xml" target="_blank">RSS</a>
+  </div>
+  
+  
+</div>
+
+      </div>
+    </div>
+  </article>
+
+  <script src="/js/highlight.pack.js"></script>
+
+
+<script>
+  hljs.initHighlightingOnLoad();
+  
+  
+  
+    
+    
+  
+</script>
+
+  
+
+</body>
+
+</html>

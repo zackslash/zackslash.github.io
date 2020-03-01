@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Luke Hines : Bottle of Code</title>
+    <link>https://zackslash.github.io/categories/</link>
+    <description>Recent content in Categories on Luke Hines : Bottle of Code</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 04 Jan 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://zackslash.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Redaction</title>
+      <link>https://zackslash.github.io/categories/redaction/</link>
+      <pubDate>Fri, 04 Jan 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/categories/redaction/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MIDI</title>
+      <link>https://zackslash.github.io/categories/midi/</link>
+      <pubDate>Mon, 16 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/categories/midi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Profiling</title>
+      <link>https://zackslash.github.io/categories/profiling/</link>
+      <pubDate>Sun, 12 Jul 2015 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/categories/profiling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Xcode</title>
+      <link>https://zackslash.github.io/categories/xcode/</link>
+      <pubDate>Sat, 08 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/categories/xcode/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>iOS</title>
+      <link>https://zackslash.github.io/categories/ios/</link>
+      <pubDate>Sat, 18 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/categories/ios/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Objective-C</title>
+      <link>https://zackslash.github.io/categories/objective-c/</link>
+      <pubDate>Sat, 06 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/categories/objective-c/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

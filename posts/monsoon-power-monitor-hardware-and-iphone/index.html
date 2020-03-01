@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="Hugo 0.65.3" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="author" content="" />
+  <meta property="og:url" content="https://zackslash.github.io/posts/monsoon-power-monitor-hardware-and-iphone/" />
+  <link rel="canonical" href="https://zackslash.github.io/posts/monsoon-power-monitor-hardware-and-iphone/" /><script type="application/ld+json">
+  {
+      "@context" : "http://schema.org",
+      "@type" : "BlogPosting",
+      "mainEntityOfPage": {
+           "@type": "WebPage",
+           "@id": "https:\/\/zackslash.github.io\/"
+      },
+      "articleSection" : "posts",
+      "name" : "Monsoon power monitoring hardware and iPhone",
+      "headline" : "Monsoon power monitoring hardware and iPhone",
+      "description" : "Note: This post was originally written in 2015 and i\x26rsquo;ve recieved great sucess stories from numerous people of whom it has helped. I\x26rsquo;ve had reports of this technique working for many of the later iPhone models and even the Apple watch! This post was also used as a reference in the book High Performance iOS Apps. What follows is the original article.\nSometimes you have to dig deep in search of optimization; one such place is power usage.",
+      "inLanguage" : "en-US",
+      "author" : "",
+      "creator" : "",
+      "publisher": "",
+      "accountablePerson" : "",
+      "copyrightHolder" : "",
+      "copyrightYear" : "2015",
+      "datePublished": "2015-07-12 00:00:00 \x2b0000 UTC",
+      "dateModified" : "2015-07-12 00:00:00 \x2b0000 UTC",
+      "url" : "https:\/\/zackslash.github.io\/posts\/monsoon-power-monitor-hardware-and-iphone\/",
+      "keywords" : [ "hardware","iphone", ]
+  }
+</script>
+<title>Monsoon power monitoring hardware and iPhone - Luke Hines : Bottle of Code</title>
+  <meta property="og:title" content="Monsoon power monitoring hardware and iPhone - Luke Hines : Bottle of Code" />
+  <meta property="og:type" content="article" />
+  <meta name="description" content="Note: This post was originally written in 2015 and i&rsquo;ve recieved great sucess stories from numerous people of whom it has helped. I&rsquo;ve had reports of this technique working for many of the later iPhone models and even the Apple watch! This post was also used as a reference in the book High Performance iOS Apps. What follows is the original article.
+Sometimes you have to dig deep in search of optimization; one such place is power usage." />
+
+  <link rel="stylesheet" href="/css/flexboxgrid-6.3.1.min.css" />
+  <link rel="stylesheet"
+    href="/css/github-markdown.min.css" />
+  <link rel="stylesheet" href="/css/highlight/tomorrow.min.css" />
+  <link rel="stylesheet" href="/css/index.css">
+  <link href="/index.xml" rel="alternate" type="application/rss+xml" title="Luke Hines : Bottle of Code">
+  
+  <link href="https://fonts.googleapis.com/css?family=Arvo|Permanent+Marker" rel="stylesheet">
+  
+  
+
+  
+</head>
+
+
+<body>
+  <article class="post " id="article">
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2 col-lg-6 col-lg-offset-3">
+        <div class="site-header">
+          
+<header>
+  <div class="signatures site-title">
+    <a href="/">Luke Hines</a>
+  </div>
+</header>
+<div class="row end-xs">
+  
+  
+</div>
+<div class="header-line"></div>
+
+        </div>
+        <header class="post-header">
+          <h1 class="post-title">Monsoon power monitoring hardware and iPhone</h1>
+          
+          <div class="row post-desc">
+            <div class="col-xs-6">
+              
+              <time class="post-date" datetime="2015-07-12 00:00:00 UTC">
+                12 Jul 2015
+              </time>
+              
+            </div>
+            <div class="col-xs-6">
+              
+            </div>
+          </div>
+          
+        </header>
+
+        <div class="post-content markdown-body">
+          <p><strong>Note:</strong> This post was originally written in 2015 and i&rsquo;ve recieved great sucess stories from numerous people of whom it has helped. I&rsquo;ve had reports of this technique working for many of the later iPhone models and even the Apple watch! This post was also used as a reference in the book <a href="https://www.amazon.com/High-Performance-iOS-Apps-Optimize/dp/149191100X">High Performance iOS Apps</a>. What follows is the original article.</p>
+<p><img src="/posts/monsoon-power-monitor-hardware-and-iPhone_images/1.jpg" alt="Monsoon package contents"></p>
+<p>Sometimes you have to dig deep in search of optimization; one such place is power usage. Unfortunately Apple’s energy profiling tool with its ‘relative’ energy usage statistics just don’t always give you the clarity you require.</p>
+<p>The solution: <a href="https://www.msoon.com/LabEquipment/PowerMonitor/">‘Power Monitor’ from Monsoon Solutions</a>. It claims to replace the battery of most mobile devices and provide true statistics of power use in real-time, in-fact it’s so good it’s even referenced in <a href="https://source.android.com/devices/tech/power/index.html#component-power">Google’s android documentation</a>.</p>
+<p>There seems to be a lot of information available for the Power Monitor relating to use with devices where the user can easily remove the battery, but what about a ‘sealed’ handset like the iPhone? Well it’s entirely possible and here’s how to use the Monsoon Solution Inc Power Monitor with an iPhone 5s…</p>
+<p>Please Note : You follow this guide at your own risk, I won’t be held responsible for whatever happens to your hardware or your health. Please take precautions as lithium-iron batteries can be volatile if tampered with.</p>
+<p>The first step is to remove the battery from the device, I won’t document this part here because there are already many well written articles elsewhere on how to do this. For example this <a href="http://www.pcadvisor.co.uk/how-to/apple/how-replace-iphone-battery-3346693/">PC Advisor article</a> and this <a href="http://www.forbes.com/sites/antonyleather/2013/10/31/how-to-replace-the-iphone-5s-battery/">Forbes article</a>.</p>
+<p><img src="/posts/monsoon-power-monitor-hardware-and-iPhone_images/2.png" alt="Battery location"></p>
+<p>Now you have the battery out of the phone you should see some black tape on the bottom of it (shown in image above) you need to peel this tape away (Peel only this tape at the end; don’t go unrolling the entire battery!) this will expose the battery’s PCB.</p>
+<p><img src="/posts/monsoon-power-monitor-hardware-and-iPhone_images/3.png" alt="Battery contacts"></p>
+<p>The PCB now exposed provides the phone with information on the battery such as capacity and current charge, it also contains fuses for over-current protection but the important thing for us to know right now is that without this PCB the phone will not boot and it is to this PCB that we must connect the monsoon.</p>
+<p><img src="/posts/monsoon-power-monitor-hardware-and-iPhone_images/4.png" alt="Battery contacts with info"></p>
+<p>Now its time to separate the PCB from the lithium-iron cells, the annotation ‘Cut Here’ in the image above points to two small aluminium tabs, these are all that connects the PCB to the cells, I simply cut them with scissors negative side first.</p>
+<p>Now your PCB and ‘connector’ should be fully separated from the body of the battery, connect your Monsoon Power Monitor respectively to the two terminals (Shown in the image above) ‘Positive’ and ‘Negative’, its worth noting that the positive terminal is the one closest to the ‘connector’ end of the PCB and the negative the furthest away.</p>
+<p><img src="/posts/monsoon-power-monitor-hardware-and-iPhone_images/5.png" alt="Battery monitor pins"></p>
+<p>Now we have our Monsoon Power Monitor connected to the battery PCB we are ready to connect the assembly back to the phone, however before we do this make note of the connector assembly’s pin-out, the main point of interest here is the Negative pin as we’re going to need to connect this pin to the negative tab of the PCB from the previous picture. Don’t do this just yet (we need to connect it to the phone first) but take note of which pin is the negative one.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">Note: There are reports around the internet of ‘tamper protection’ on the battery PCB. It turns out these reports are false. I; like may others failed to power on the PCB after separating it from the lithium-iron cells and feared tamper protection until Tom Lee in the [comments of Jason Gin’s](https://ripitapart.wordpress.com/2014/07/25/looking-inside-an-iphone-5-battery/) Blog pointed out that it is actually a form of surge protection that can be overcome by connecting the two negative terminals.
+</code></pre></div><p>With our PCB connector attached back to the phone and our power monitor attached to our PCB we’re almost done! Load up the power monitor software and enable power output to the iPhone, try and turn on the phone and you may realise it’s not turning on! (Oh no!) but it’s OK, we only require this last step to reset the protection circuitry on the PCB, as mentioned earlier all we need to do is connect the negative tab of the battery PCB (Or the negative connection from the power monitor) to the negative pin on the connector, I do this with a very thin wire. I’ve put an image below to show exactly the two places that need to be connected once the connector is attached to the phone, this step must be done every time you power on the power monitor the iPhone will simply not boot without doing this as once the PCB looses all power it goes back into its ‘locked’ state. The connection between these two points does not need to be permanent they only have to touch for a split second while there is power and the phone will then run.</p>
+<p><img src="/posts/monsoon-power-monitor-hardware-and-iPhone_images/6.png" alt="Contact point"></p>
+<p>As soon as you successfully connect these two negative terminals you will see activity on your power monitor then you can press the power button and fully boot up the device.</p>
+<p><img src="/posts/monsoon-power-monitor-hardware-and-iPhone_images/7.png" alt="Setup picture"></p>
+<p>That’s all! you can now go away and do some deep power analysis with your power monitor on your iOS apps and hardware.</p>
+<p>The analysis provided by these devices can be invaluable. If you find this post useful please share it. Thanks.</p>
+
+        </div>
+
+        <div class="row middle-xs">
+          <div class="col-xs-12">
+            
+            <div class="post-category">
+              <a href="/categories/profiling/">
+                Profiling
+              </a>
+            </div>
+            
+          </div>
+        </div>
+
+        
+        
+
+        
+        
+        <div style="height: 50px;"></div>
+        
+        
+
+        <div class="site-footer">
+  
+  <div class="site-footer-item">
+    <a href="/contact" target="_blank">Contact Me</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="https://github.com/zackslash" target="_blank">Github</a>
+  </div>
+  
+  <div class="site-footer-item">
+    <a href="/index.xml" target="_blank">RSS</a>
+  </div>
+  
+  
+</div>
+
+      </div>
+    </div>
+  </article>
+
+  <script src="/js/highlight.pack.js"></script>
+
+
+<script>
+  hljs.initHighlightingOnLoad();
+  
+  
+  
+    
+    
+  
+</script>
+
+  
+
+</body>
+
+</html>

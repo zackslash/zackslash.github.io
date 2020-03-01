@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>midi on Luke Hines : Bottle of Code</title>
+    <link>https://zackslash.github.io/tags/midi/</link>
+    <description>Recent content in midi on Luke Hines : Bottle of Code</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 16 Jan 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://zackslash.github.io/tags/midi/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>MIDI Translation</title>
+      <link>https://zackslash.github.io/posts/midi-translation/</link>
+      <pubDate>Mon, 16 Jan 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/posts/midi-translation/</guid>
+      <description>Download the Pro2Addict tool: Mac – Windows – Linux – Source Code
+Download from links above or keep reading for some insight into the solution.
+MIDI files are the universal standard for music data such as musical notes, when they are played and how long each note is held. They work great for the majority of instruments that follow a standard notation; however there are some inconsistencies when interpreting music for percussion instruments.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Xcode on Luke Hines : Bottle of Code</title>
+    <link>https://zackslash.github.io/categories/xcode/</link>
+    <description>Recent content in Xcode on Luke Hines : Bottle of Code</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 08 Nov 2014 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://zackslash.github.io/categories/xcode/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Adding files to Xcode projects from CLI</title>
+      <link>https://zackslash.github.io/posts/xcode-add-files-from-command-line/</link>
+      <pubDate>Sat, 08 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>https://zackslash.github.io/posts/xcode-add-files-from-command-line/</guid>
+      <description>NOTE!: It&amp;rsquo;s now the year 2020 and I believe this technique no longer works in the latest versions of xcode. I have archived the github repo. I&amp;rsquo;ve left everything public so the information still exists. What follows is my original article from 2014&amp;hellip;
+There have been times when building xcode projects from terminal has been very convenient, i’ve also done it in a lot of scripts, however there is a drawback to this technique and I hope to solve it in this article.</description>
+    </item>
+    
+  </channel>
+</rss>
