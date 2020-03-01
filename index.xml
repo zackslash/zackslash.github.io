@@ -37,8 +37,9 @@ Someone once asked me what I knew about the payment provider ‘Payeer’ as an 
       
       <guid>https://zackslash.github.io/posts/midi-translation/</guid>
       <description>Download the Pro2Addict tool: Mac – Windows – Linux – Source Code
-Download from links above or keep reading for some insight into the solution.
-MIDI files are the universal standard for music data such as musical notes, when they are played and how long each note is held. They work great for the majority of instruments that follow a standard notation; however there are some inconsistencies when interpreting music for percussion instruments.</description>
+Keep reading for some insight into the solution.
+MIDI files are the universal standard for music data such as musical notes, when they are played and how long each note is held. They work great for the majority of instruments that follow a standard notation; however there are some inconsistencies when interpreting music for percussion instruments.
+I encountered these inconsistencies when trying to move a drum composition from Guitar Pro 6 into Addictive Drums 2; the way in which drum notes are recorded in the MIDI format means that one program may interpret them completely differently to another.</description>
     </item>
     
     <item>
